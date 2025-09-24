@@ -19,7 +19,7 @@ export class AuthController {
 
   @Get('users')
   getAllUsers(): Observable<UserRto[]> {
-    return this.networkingService.authClient.send(
+    return this.networkingService.authClient.send<UserRto[]>(
       {
         cmd: 'get-users',
       },
