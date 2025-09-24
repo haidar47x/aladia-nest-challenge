@@ -21,6 +21,25 @@
     "noImplicitAny": true,
     "strictBindCallApply": true,
     "noFallthroughCasesInSwitch": true,
-    "paths": {}
+    "paths": {
+      "@lib/common": [
+        "libs/common/src"
+      ],
+      "@lib/common/*": [
+        "libs/common/src/*"
+      ],
+      "@lib/config": [
+        "libs/config/src"
+      ],
+      "@lib/config/*": [
+        "libs/config/src/*"
+      ],
+      "@lib/core": [
+        "libs/core/src"
+      ],
+      "@lib/core/*": [
+        "libs/core/src/*"
+      ]
+    }
   }
 }
