@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AuthenticationModule } from './authentication.module';
 
 async function bootstrap() {
@@ -8,12 +8,14 @@ async function bootstrap() {
     {
       transport: Transport.TCP,
       options: {
-        host: '127.0.0.1',
-        port: 3001
-      }
+        host: process.env.HOST || '0.0.0.0',
+        port: +(process.env.AUTH_PORT || 3001),
+      },
     },
   );
   await app.listen();
+
+  console.log('Auth microservice is listening on port 3001 (TCP)');
 }
 
 bootstrap();
