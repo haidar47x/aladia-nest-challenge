@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { CoreService } from './core.service';
+import { NetworkingService } from '@lib/core/networking.service';
 
 @Module({
-  providers: [CoreService],
-  exports: [CoreService],
+  providers: [NetworkingService],
+  exports: [NetworkingService],
 })
 export class CoreModule {}
