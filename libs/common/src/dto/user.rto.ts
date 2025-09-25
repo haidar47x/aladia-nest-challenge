@@ -1,1 +1,1 @@
-import { Expose, Exclude } from 'class-transformer';export class UserRto {  @Expose()  id: string;  @Expose()  name: string;  @Expose()  email: string;  @Exclude()  password: string;}
+import { Expose, Exclude } from 'class-transformer';export class UserRto {  @Expose()  _id: string;  @Expose()  name: string;  @Expose()  email: string;  @Exclude()  passwordHash: string;}
