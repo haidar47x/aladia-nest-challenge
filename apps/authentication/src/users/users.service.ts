@@ -5,13 +5,12 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { RegisterUserDto } from '@lib/common';
+import { RegisterUserDto, UserRto } from '@lib/common';
 import { UsersRepository } from './users.repository';
-import { UserDocument } from './users.schema';
 import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@lib/logger';
-
-export type LoginSuccessResponse = { token: string };
+import { TokenRto } from '@lib/common/rto/token.rto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +22,7 @@ export class UsersService {
     this.logger.setContext(UsersService.name);
   }
 
-  async register(dto: RegisterUserDto): Promise<UserDocument> {
+  async register(dto: RegisterUserDto): Promise<UserRto> {
     const exists = await this.usersRepository.findByEmail(dto.email);
 
     if (exists) {
@@ -37,16 +36,16 @@ export class UsersService {
       passwordHash,
     };
 
-    /** Refactor: Automate mapping to RTO to exclude credentials */
-    return this.usersRepository.create(userToCreate);
+    const createdUser = this.usersRepository.create(userToCreate);
+    return plainToInstance(UserRto, createdUser);
   }
 
-  /** Refactor: Map to RTO and exclude sensitive fields */
   async findAll() {
-    return await this.usersRepository.findAll();
+    const users = await this.usersRepository.findAll();
+    return users.map((user) => plainToInstance(UserRto, user));
   }
 
-  async login(email: string, password: string): Promise<LoginSuccessResponse> {
+  async login(email: string, password: string): Promise<TokenRto> {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       this.logger.log('User not found: ' + email);
@@ -65,6 +64,6 @@ export class UsersService {
     });
 
     this.logger.log('Signing token for: ' + user.email);
-    return { token };
+    return plainToInstance(TokenRto, { token });
   }
 }

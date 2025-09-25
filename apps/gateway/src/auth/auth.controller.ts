@@ -6,8 +6,6 @@ import {
   Inject,
   Post,
   UseInterceptors,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { NetworkingService } from '@lib/core';
 import { LoginUserDto, RegisterUserDto, UserRto } from '@lib/common';
@@ -15,6 +13,7 @@ import { Observable } from 'rxjs';
 import { Logger } from '@lib/logger';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
+import { TokenRto } from '@lib/common/rto/token.rto';
 
 @Controller('auth')
 export class AuthController {
@@ -35,10 +34,11 @@ export class AuthController {
   @ApiResponse({
     status: 401,
     description: 'Unauthorized',
+    type: UserRto,
   })
   @Post('login')
-  loginUser(@Body() data: LoginUserDto): Observable<any> {
-    return this.networkingService.authClient.send<any>(
+  loginUser(@Body() data: LoginUserDto): Observable<TokenRto> {
+    return this.networkingService.authClient.send<TokenRto>(
       {
         cmd: 'login-user',
       },
@@ -90,7 +90,8 @@ export class AuthController {
   getAllUsers(
     @Headers('authorization') authHeader: string,
   ): Observable<UserRto[]> {
-    const token = authHeader?.split(' ')[1]; // Bearer <token>
+    /** Extract Bearer token from the header */
+    const token = authHeader?.split(' ')[1];
     return this.networkingService.authClient.send<UserRto[]>(
       { cmd: 'get-users' },
       { token },
