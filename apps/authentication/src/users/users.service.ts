@@ -36,8 +36,10 @@ export class UsersService {
       passwordHash,
     };
 
-    const createdUser = this.usersRepository.create(userToCreate);
-    return plainToInstance(UserRto, createdUser);
+    const createdUser = await this.usersRepository.create(userToCreate);
+    return plainToInstance(UserRto, createdUser, {
+      excludeExtraneousValues: true,
+    });
   }
 
   async findAll() {
@@ -59,7 +61,7 @@ export class UsersService {
     }
 
     const token = this.jwtService.sign({
-      sub: user._id,
+      _id: user._id,
       email: user.email,
     });
 

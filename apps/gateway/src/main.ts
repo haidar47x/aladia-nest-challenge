@@ -25,7 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
   logger.log('Swagger API docs available at /api');
 
-  logger.log('Gateway listening for incoming requests');
+  logger.log('Gateway listening for incoming requests on :4532');
   await app.listen(+(process.env.GATEWAY_PORT || 4532));
 }
 

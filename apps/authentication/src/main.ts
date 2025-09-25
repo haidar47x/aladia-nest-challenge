@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AuthenticationModule } from './authentication.module';
 import { Logger } from '@lib/logger';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -16,12 +17,19 @@ async function bootstrap() {
     },
   );
 
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+    }),
+  );
+
   const logger = await app.resolve(Logger);
   app.useLogger(logger);
   logger.setContext('Authentication Bootstrap');
 
   await app.listen();
-  logger.log('Auth microservice is listening on :3001');
+  logger.log('Auth microservice starting on :3001');
 }
 
 bootstrap();

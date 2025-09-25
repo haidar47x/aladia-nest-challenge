@@ -14,7 +14,7 @@ export class UsersRepository {
 
   async create(createUserDto: RegisterUserDto): Promise<UserDocument> {
     const createdUser = new this.userModel(createUserDto);
-    return createdUser.save();
+    return await createdUser.save();
   }
 
   async findAll(): Promise<UserLeanDocument[]> {
