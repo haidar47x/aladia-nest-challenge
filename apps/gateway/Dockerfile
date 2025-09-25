@@ -3,5 +3,5 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build --workspace=gateway
+RUN npx nest build gateway
 CMD ["node", "dist/apps/gateway/main.js"]
