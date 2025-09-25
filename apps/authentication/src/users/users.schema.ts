@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, HydratedDocument } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class User extends Document {
@@ -12,7 +13,7 @@ export class User extends Document {
   passwordHash: string;
 }
 
-export type UserDocument = User & Document;
+export type UserDocument = HydratedDocument<User>;
 export type UserLeanDocument = {
   _id: string;
   name: string;
