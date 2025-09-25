@@ -11,12 +11,13 @@
 - [x] Implement schemas using `mongoose`
 - [x] Database connectivity and persistence using `mongodb`
 - [x] Use of DTOs and RTOs
-- [ ] Centralized logging module
+- [x] Centralized logging module
 - [ ] Test Coverage:
     - [x] Unit Tests
     - [ ] E2E Tests
 - [ ] Health checks and liveliness
 - [ ] Rate limiting and throttling
+- [ ] Caching
 - [ ] Video walkthrough
 - [ ] Swagger documentation
 - [ ] Docker/Containers support
