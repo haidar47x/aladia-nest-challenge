@@ -17,7 +17,6 @@ import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('auth')
-@UsePipes(new ValidationPipe({ transform: true }))
 export class AuthController {
   constructor(
     private readonly networkingService: NetworkingService,
@@ -47,7 +46,6 @@ export class AuthController {
     );
   }
 
-  @Post('register')
   @ApiOperation({
     summary: 'Registers a user',
   })
@@ -60,6 +58,7 @@ export class AuthController {
     status: 409,
     description: 'Conflict. Email already exists.',
   })
+  @Post('register')
   registerUser(@Body() data: RegisterUserDto): Observable<UserRto> {
     return this.networkingService.authClient.send<UserRto>(
       {
@@ -98,7 +97,6 @@ export class AuthController {
     );
   }
 
-  @Get('ping')
   @ApiOperation({
     summary: 'Checks liveliness of authentication',
   })
@@ -115,6 +113,7 @@ export class AuthController {
     status: 500,
     description: 'Internal server error if something is wrong',
   })
+  @Get('ping')
   ping() {
     this.logger.log('Pinging...');
     return this.networkingService.authClient.send<string>({ cmd: 'ping' }, {});
