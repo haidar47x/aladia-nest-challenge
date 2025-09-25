@@ -6,6 +6,7 @@ import { HealthModule } from './health/health.module';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -23,6 +24,14 @@ import { APP_GUARD } from '@nestjs/core';
           limit: configService.get<number>('THROTTLE_LIMIT', 10),
         },
       ],
+    }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        ttl: configService.get<number>('CACHE_TTL', 10) * 1000,
+      }),
     }),
   ],
   providers: [

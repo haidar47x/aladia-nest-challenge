@@ -1,28 +1,27 @@
 ### Checklist
 
-- [x] Build a structured monorepo of modules that follows MVC and CSR patterns
-- [x] Implement `gateway` app
-- [x] Implement `authentication` app
+- [x] **Monorepo**: Build a structured monorepo of modules that follows MVC and CSR patterns
+- [x] **Gateway**: Implement `gateway` app
+- [x] **Authentication**: Implement `authentication` app
     - [x] Implement JWT login flow on `/auth/login`
     - [x] Implement `/register`
     - [x] Implement `/users` for fetching users
-- [x] Implement `NetworkService` for internal communication via `TCP` from Gateway to Authentication
-- [x] Implement validation with `class-validator`
-- [x] Implement schemas using `mongoose`
-- [x] Database connectivity and persistence using `mongodb`
-- [ ] Use of DTOs and RTOs (with Mapping)
-- [x] Centralized logging module
-- [ ] Test Coverage:
+- [x] **Network Service**: Implement `NetworkService` for internal communication via `TCP` from Gateway to Authentication
+- [x] **Validation**: Implement validation with `class-validator`
+- [x] **Database**: Persistence using `mongodb`
+- [x] **Logging**: Centralized module
+- [ ] **Tests**:
     - [x] Unit Tests
     - [ ] E2E Tests
-- [x] Health checks: `<gateway>/health`
+- [x] **Health Checks**: `<gateway>/health`
   - [x] Gateway microservice hit
   - [x] NetworkService hit
   - [x] Authentication microservice hit
   - [x] MongoDB hit
-- [x] Rate limiting and throttling
-- [ ] Caching
-- [x] Swagger documentation: `<gateway>/api`
-- [ ] Docker/Containers support
+- [x] **Rate Limiting**
+- [x] **Caching**: via `cache-manager` for `/users`
+- [x] **Swagger**: `<gateway>/api`
+- [ ] **Docker**: Dockerized all services
 - [ ] GitHub `README.md` for usage and architectural documentation
+- [ ] Use of DTOs and RTOs (with Mapping)
 - [ ] Video walkthrough

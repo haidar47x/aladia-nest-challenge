@@ -5,6 +5,7 @@ import {
   Headers,
   Inject,
   Post,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { LoginUserDto, RegisterUserDto, UserRto } from '@lib/common';
 import { Observable } from 'rxjs';
 import { Logger } from '@lib/logger';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('auth')
 @UsePipes(new ValidationPipe({ transform: true }))
@@ -84,6 +86,7 @@ export class AuthController {
     status: 429,
     description: 'Too many requests. Rate limited exceeded.',
   })
+  @UseInterceptors(CacheInterceptor)
   @Get('users')
   getAllUsers(
     @Headers('authorization') authHeader: string,
