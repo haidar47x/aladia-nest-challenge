@@ -19,6 +19,7 @@
 - [ ] Rate limiting and throttling
 - [ ] Caching
 - [ ] Video walkthrough
-- [ ] Swagger documentation
+- [x] Swagger documentation
 - [ ] Docker/Containers support
+- [ ] Mapping refactor for Documents, DTO, and RTO
 - [ ] GitHub `README.md` for usage and architectural documentation
