@@ -5,8 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
   await app.listen(+(process.env.GATEWAY_PORT || 3000));
+  console.log('Gateway listening for incoming requests');
 }
 
 bootstrap();

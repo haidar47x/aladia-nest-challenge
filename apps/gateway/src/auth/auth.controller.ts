@@ -44,4 +44,9 @@ export class AuthController {
       {},
     );
   }
+
+  @Get('ping')
+  ping() {
+    return this.networkingService.authClient.send<any>({ cmd: 'ping' }, {});
+  }
 }

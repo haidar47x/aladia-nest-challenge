@@ -21,4 +21,9 @@ export class UsersController {
   async getAllUsers() {
     return this.usersService.findAll();
   }
+
+  @MessagePattern({ cmd: 'ping' })
+  ping() {
+    console.log('Pong!');
+  }
 }
