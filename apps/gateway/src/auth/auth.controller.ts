@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   UsePipes,
+  Headers,
   ValidationPipe,
 } from '@nestjs/common';
 import { NetworkingService } from '@lib/core';
@@ -36,12 +37,13 @@ export class AuthController {
   }
 
   @Get('users')
-  getAllUsers(): Observable<UserRto[]> {
+  getAllUsers(
+    @Headers('authorization') authHeader: string,
+  ): Observable<UserRto[]> {
+    const token = authHeader?.split(' ')[1]; // Bearer <token>
     return this.networkingService.authClient.send<UserRto[]>(
-      {
-        cmd: 'get-users',
-      },
-      {},
+      { cmd: 'get-users' },
+      { token },
     );
   }
 

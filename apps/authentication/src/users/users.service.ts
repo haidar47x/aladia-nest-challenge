@@ -1,14 +1,25 @@
 import * as bcrypt from 'bcrypt';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { RegisterUserDto } from '@lib/common';
 import { UsersRepository } from './users.repository';
 import { UserDocument } from './users.schema';
+import { JwtService } from '@nestjs/jwt';
+
+export type LoginSuccessResponse = { token: string };
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+  constructor(
+    private readonly usersRepository: UsersRepository,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(dto: RegisterUserDto): Promise<UserDocument> {
+    console.log('Registering user...');
     const exists = await this.usersRepository.findByEmail(dto.email);
 
     if (exists) {
@@ -30,5 +41,26 @@ export class UsersService {
     return await this.usersRepository.findAll();
   }
 
-  /** Implement: JWT-based auth for logging in a user */
+  async login(email: string, password: string): Promise<LoginSuccessResponse> {
+    console.log('Logging in...');
+    const user = await this.usersRepository.findByEmail(email);
+    if (!user) {
+      console.log('User not found...');
+      throw new UnauthorizedException('User not found');
+    }
+
+    const credentialsMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!credentialsMatch) {
+      console.log("Credentials don't match...");
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    console.log('Signing token...');
+    const token = this.jwtService.sign({
+      sub: user._id,
+      email: user.email,
+    });
+
+    return { token };
+  }
 }
