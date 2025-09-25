@@ -15,11 +15,15 @@
 - [ ] Test Coverage:
     - [x] Unit Tests
     - [ ] E2E Tests
-- [ ] Health checks and liveliness
+- [x] Health checks and liveliness
+  - [x] Gateway microservice hit
+  - [x] NetworkService hit
+  - [x] Authentication microservice hit
+  - [x] MongoDB hit
 - [ ] Rate limiting and throttling
 - [ ] Caching
 - [ ] Video walkthrough
-- [x] Swagger documentation
+- [x] Swagger documentation: `localhost:3000/api`
 - [ ] Docker/Containers support
 - [ ] Mapping refactor for Documents, DTO, and RTO
 - [ ] GitHub `README.md` for usage and architectural documentation
