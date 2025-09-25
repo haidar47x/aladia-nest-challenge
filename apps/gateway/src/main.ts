@@ -10,7 +10,7 @@ async function bootstrap() {
 
   const logger = await app.resolve(Logger);
   app.useLogger(logger);
-  logger.setContext(bootstrap.name);
+  logger.setContext('Gateway Bootstap');
   logger.log('Gateway listening for incoming requests');
 }
 

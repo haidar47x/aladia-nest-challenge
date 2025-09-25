@@ -20,7 +20,7 @@ async function bootstrap() {
 
   const logger = await app.resolve(Logger);
   app.useLogger(logger);
-  logger.setContext(bootstrap.name);
+  logger.setContext('Authentication Bootstrap');
   logger.log('Auth microservice is listening on :3001');
 }
 
