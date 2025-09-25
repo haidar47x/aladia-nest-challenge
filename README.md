@@ -10,20 +10,19 @@
 - [x] Implement validation with `class-validator`
 - [x] Implement schemas using `mongoose`
 - [x] Database connectivity and persistence using `mongodb`
-- [x] Use of DTOs and RTOs
+- [ ] Use of DTOs and RTOs (with Mapping)
 - [x] Centralized logging module
 - [ ] Test Coverage:
     - [x] Unit Tests
     - [ ] E2E Tests
-- [x] Health checks and liveliness
+- [x] Health checks: `<gateway>/health`
   - [x] Gateway microservice hit
   - [x] NetworkService hit
   - [x] Authentication microservice hit
   - [x] MongoDB hit
-- [ ] Rate limiting and throttling
+- [x] Rate limiting and throttling
 - [ ] Caching
-- [ ] Video walkthrough
-- [x] Swagger documentation: `localhost:3000/api`
+- [x] Swagger documentation: `<gateway>/api`
 - [ ] Docker/Containers support
-- [ ] Mapping refactor for Documents, DTO, and RTO
 - [ ] GitHub `README.md` for usage and architectural documentation
+- [ ] Video walkthrough

@@ -80,6 +80,10 @@ export class AuthController {
     status: 401,
     description: 'Unauthorized',
   })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests. Rate limited exceeded.',
+  })
   @Get('users')
   getAllUsers(
     @Headers('authorization') authHeader: string,
@@ -99,6 +103,10 @@ export class AuthController {
     status: 200,
     description: 'Returns "pong" upon successful ping.',
     type: String,
+  })
+  @ApiResponse({
+    status: 429,
+    description: 'Too many requests. Rate limited exceeded.',
   })
   @ApiResponse({
     status: 500,
