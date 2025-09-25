@@ -1,14 +1,15 @@
 import * as bcrypt from 'bcrypt';
 import { ConflictException, Injectable } from '@nestjs/common';
 import { RegisterUserDto } from '@lib/common';
-import { UserDocument, UserRepository } from './users.repository';
+import { UsersRepository } from './users.repository';
+import { UserDocument } from './users.schema';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly usersRepository: UsersRepository) {}
 
   async register(dto: RegisterUserDto): Promise<UserDocument> {
-    const exists = await this.userRepository.findByEmail(dto.email);
+    const exists = await this.usersRepository.findByEmail(dto.email);
 
     if (exists) {
       throw new ConflictException('Email already exists');
@@ -21,12 +22,12 @@ export class UsersService {
     };
 
     /** Refactor: Automate mapping to RTO to exclude credentials */
-    return this.userRepository.create(userToCreate);
+    return this.usersRepository.create(userToCreate);
   }
 
   /** Refactor: Map to RTO and exclude sensitive fields */
-  async findAll(): Promise<UserDocument[]> {
-    return await this.userRepository.findAll();
+  async findAll() {
+    return await this.usersRepository.findAll();
   }
 
   /** Implement: JWT-based auth for logging in a user */
