@@ -39,6 +39,12 @@
       ],
       "@lib/core/*": [
         "libs/core/src/*"
+      ],
+      "@lib/logger": [
+        "libs/logger/src"
+      ],
+      "@lib/logger/*": [
+        "libs/logger/src/*"
       ]
     }
   }

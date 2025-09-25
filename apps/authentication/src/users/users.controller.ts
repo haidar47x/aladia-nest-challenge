@@ -1,12 +1,18 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { LoginUserDto, RegisterUserDto } from '@lib/common';
 import { of } from 'rxjs';
+import { Logger } from '@lib/logger';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    @Inject(Logger) private readonly logger: Logger,
+  ) {
+    this.logger.setContext(UsersController.name);
+  }
 
   @MessagePattern({ cmd: 'register-user' })
   async registerUser(dto: RegisterUserDto) {
@@ -20,14 +26,13 @@ export class UsersController {
 
   @MessagePattern({ cmd: 'get-users' })
   async getAllUsers() {
-    console.log('Getting all users...');
     return this.usersService.findAll();
   }
 
   /** Meant for testing only */
   @MessagePattern({ cmd: 'ping' })
   ping() {
-    console.log('pong');
+    this.logger.log('Pong...');
     return of('pong');
   }
 }
