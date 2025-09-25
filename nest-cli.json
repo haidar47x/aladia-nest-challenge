@@ -1,24 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/aladia-nest-challenge/src",
+  "monorepo": true,
+  "sourceRoot": "apps",
+  "root": "apps",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/aladia-nest-challenge/tsconfig.app.json"
+    "webpack": true
   },
-  "monorepo": true,
-  "root": "apps/aladia-nest-challenge",
   "projects": {
-    "aladia-nest-challenege": {
-      "type": "application",
-      "root": "apps/aladia-nest-challenge",
-      "entryFile": "main",
-      "sourceRoot": "apps/aladia-nest-challenge/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/aladia-nest-challenge/tsconfig.app.json"
-      }
-    },
     "authentication": {
       "type": "application",
       "root": "apps/authentication",

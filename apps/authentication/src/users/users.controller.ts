@@ -24,6 +24,7 @@ export class UsersController {
 
   @MessagePattern({ cmd: 'ping' })
   ping() {
-    console.log('Pong!');
+    console.log('pong');
+    return 'pong';
   }
 }
