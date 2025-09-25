@@ -22,6 +22,6 @@
 - [x] **Caching**: via `cache-manager` for `/users`
 - [x] **Swagger**: `<gateway>/api`
 - [ ] **Docker**: Dockerized all services
-- [ ] GitHub `README.md` for usage and architectural documentation
-- [ ] Use of DTOs and RTOs (with Mapping)
-- [ ] Video walkthrough
+- [ ] **Documentation**: GitHub `README.md` for usage and architectural documentation
+- [ ] **Postman Collection**: Simplified collection for quick testing
+- [ ] **Walkthrough**: Video walkthrough

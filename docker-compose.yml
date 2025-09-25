@@ -7,28 +7,42 @@ services:
       - mongo-data:/data/db
     ports:
       - "27017:27017"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    command: ["mongod", "--setParameter", "logLevel=0"]
+    networks:
+      - appnet
 
   authentication:
     build:
       context: .
-      dockerfile: apps/authentication/Dockerfile
+      dockerfile: ./apps/authentication/Dockerfile
     environment:
       - MONGO_URI=mongodb://mongo:27017/authdb
-      - PORT=3001
+      - AUTH_SERVICE_HOST=0.0.0.0
+      - AUTH_SERVICE_PORT=3001
+      - JWT_SECRET=super-secret-key
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
     networks:
       - appnet
 
   gateway:
     build:
       context: .
-      dockerfile: apps/gateway/Dockerfile
+      dockerfile: ./apps/gateway/Dockerfile
     ports:
-      - "3000:3000"
+      - "4532:4532"
     environment:
+      - GATEWAY_PORT=4532
       - AUTH_SERVICE_HOST=authentication
       - AUTH_SERVICE_PORT=3001
+      - JWT_SECRET=super-secret-key
     depends_on:
       - authentication
     networks:

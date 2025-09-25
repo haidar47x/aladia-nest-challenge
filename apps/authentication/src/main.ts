@@ -16,11 +16,11 @@ async function bootstrap() {
     },
   );
 
-  await app.listen();
-
   const logger = await app.resolve(Logger);
   app.useLogger(logger);
   logger.setContext('Authentication Bootstrap');
+
+  await app.listen();
   logger.log('Auth microservice is listening on :3001');
 }
 
