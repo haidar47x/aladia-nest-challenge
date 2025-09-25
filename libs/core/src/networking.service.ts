@@ -7,16 +7,14 @@ import {
 
 @Injectable()
 export class NetworkingService implements OnModuleInit {
-  public authClient: ClientProxy;
+  public authClient!: ClientProxy;
 
   onModuleInit(): any {
     this.authClient = ClientProxyFactory.create({
       transport: Transport.TCP,
       options: {
-        host: '127.0.0.1',
-
-        /** Authentication microservice is listening on 3001 */
-        port: 3001,
+        host: process.env.AUTH_SERVICE_HOST || '127.0.0.1',
+        port: +(process.env.AUTH_SERVICE_PORT || 3001),
       },
     });
   }
