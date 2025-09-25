@@ -12,4 +12,12 @@ export class User extends Document {
   passwordHash: string;
 }
 
+export type UserDocument = User & Document;
+export type UserLeanDocument = {
+  _id: string;
+  name: string;
+  email: string;
+  passwordHash: string;
+};
+
 export const UserSchema = SchemaFactory.createForClass(User);

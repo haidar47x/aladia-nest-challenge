@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../schemas/users.schema';
+import { User, UserDocument, UserLeanDocument } from '../schemas/users.schema';
 import { Document, Model } from 'mongoose';
 import { RegisterUserDto } from '@lib/common';
-
-export type UserDocument = Document;
 
 @Injectable()
 export class UserRepository {
@@ -19,7 +17,11 @@ export class UserRepository {
     return createdUser.save();
   }
 
-  async findAll(): Promise<UserDocument[]> {
-    return this.userModel.find().lean().exec();
+  async findAll(): Promise<UserLeanDocument[]> {
+    /** Mongoose's TypeScript support for lean() is weak, thus causing errors.
+     *  Therefore, we use "as any". Nevertheless, "UserLeanDocument"
+     *  can still provide clarity for what's happening.
+     */
+    return this.userModel.find().lean().exec() as any;
   }
 }
