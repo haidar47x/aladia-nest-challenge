@@ -1,0 +1,41 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  authentication:
+    build:
+      context: .
+      dockerfile: apps/authentication/Dockerfile
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/authdb
+      - PORT=3001
+    depends_on:
+      - mongo
+    networks:
+      - appnet
+
+  gateway:
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - AUTH_SERVICE_HOST=authentication
+      - AUTH_SERVICE_PORT=3001
+    depends_on:
+      - authentication
+    networks:
+      - appnet
+
+volumes:
+  mongo-data:
+
+networks:
+  appnet:
