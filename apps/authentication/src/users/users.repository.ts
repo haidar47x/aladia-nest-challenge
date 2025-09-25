@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User, UserDocument, UserLeanDocument } from '../schemas/users.schema';
-import { Document, Model } from 'mongoose';
+import { User, UserDocument, UserLeanDocument } from './users.schema';
+import { Model } from 'mongoose';
 import { RegisterUserDto } from '@lib/common';
 
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findByEmail(email: string): Promise<UserDocument | null> {

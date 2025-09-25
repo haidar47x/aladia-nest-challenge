@@ -18,7 +18,9 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() data: LoginUserDto): Observable<any> {
     return this.networkingService.authClient.send<any>(
-      { cmd: 'login-user' },
+      {
+        cmd: 'login-user',
+      },
       data,
     );
   }
