@@ -1,11 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/aladia-nest-challenege/src",
+  "sourceRoot": "apps/aladia-nest-challenge/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/aladia-nest-challenege/tsconfig.app.json"
+    "tsConfigPath": "apps/aladia-nest-challenge/tsconfig.app.json"
   },
   "monorepo": true,
   "root": "apps/aladia-nest-challenge",
