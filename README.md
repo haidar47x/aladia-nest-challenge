@@ -27,7 +27,7 @@
 
 ### Architecture
 
-![High Level Diagram](./github/diagram.png)
+![High Level Diagram](./docs/diagram.png)
 
 ### Usage
 
