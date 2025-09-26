@@ -23,6 +23,6 @@
 - [x] **Error Handling**: Centralized error handler
 - [x] **Swagger**: `<gateway>/api`
 - [x] **Docker**: Dockerized all services
-- [x] **Postman Collection**: [Link to Collection](https://haidar47x-4349353.postman.co/workspace/Haidar's-Workspace's-Workspace~b7b2e0e3-f487-4680-8014-d7b4d8ff438f/collection/48799541-86928dbb-5d2f-41a3-8f29-041695ce687a?action=share&source=copy-link&creator=48799541) or [GitHub Link]()
+- [x] **Postman Collection**: [Link to Collection](https://haidar47x-4349353.postman.co/workspace/Haidar's-Workspace's-Workspace~b7b2e0e3-f487-4680-8014-d7b4d8ff438f/collection/48799541-86928dbb-5d2f-41a3-8f29-041695ce687a?action=share&source=copy-link&creator=48799541) or [JSON Download](https://github.com/haidar47x/aladia-nest-challenge/raw/refs/heads/master/docs/challenge.postman_collection.json)
 - [ ] **Documentation**: GitHub `README.md` for usage and architectural documentation
 - [ ] **Walkthrough**: Video walkthrough
