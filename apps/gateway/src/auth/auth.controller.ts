@@ -3,13 +3,15 @@ import {
   Controller,
   Get,
   Headers,
+  HttpException,
   Inject,
   Post,
+  ServiceUnavailableException,
   UseInterceptors,
 } from '@nestjs/common';
 import { NetworkingService } from '@lib/core';
 import { LoginUserDto, RegisterUserDto, UserRto } from '@lib/common';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Logger } from '@lib/logger';
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CacheInterceptor } from '@nestjs/cache-manager';
@@ -38,12 +40,18 @@ export class AuthController {
   })
   @Post('login')
   loginUser(@Body() data: LoginUserDto): Observable<TokenRto> {
-    return this.networkingService.authClient.send<TokenRto>(
-      {
-        cmd: 'login-user',
-      },
-      data,
-    );
+    return this.networkingService.authClient
+      .send<TokenRto>(
+        {
+          cmd: 'login-user',
+        },
+        data,
+      )
+      .pipe(
+        catchError((err) =>
+          throwError(() => new HttpException(err.message, err.status)),
+        ),
+      );
   }
 
   @ApiOperation({
@@ -60,12 +68,18 @@ export class AuthController {
   })
   @Post('register')
   registerUser(@Body() data: RegisterUserDto): Observable<UserRto> {
-    return this.networkingService.authClient.send<UserRto>(
-      {
-        cmd: 'register-user',
-      },
-      data,
-    );
+    return this.networkingService.authClient
+      .send<UserRto>(
+        {
+          cmd: 'register-user',
+        },
+        data,
+      )
+      .pipe(
+        catchError((err) =>
+          throwError(() => new HttpException(err.message, err.status)),
+        ),
+      );
   }
 
   @ApiBearerAuth()
@@ -92,10 +106,13 @@ export class AuthController {
   ): Observable<UserRto[]> {
     /** Extract Bearer token from the header */
     const token = authHeader?.split(' ')[1];
-    return this.networkingService.authClient.send<UserRto[]>(
-      { cmd: 'get-users' },
-      { token },
-    );
+    return this.networkingService.authClient
+      .send<UserRto[]>({ cmd: 'get-users' }, { token })
+      .pipe(
+        catchError((err) =>
+          throwError(() => new HttpException(err.message, err.status)),
+        ),
+      );
   }
 
   @ApiOperation({
@@ -117,6 +134,17 @@ export class AuthController {
   @Get('ping')
   ping() {
     this.logger.log('Pinging...');
-    return this.networkingService.authClient.send<string>({ cmd: 'ping' }, {});
+    return this.networkingService.authClient
+      .send<string>({ cmd: 'ping' }, {})
+      .pipe(
+        catchError(() =>
+          throwError(
+            () =>
+              new ServiceUnavailableException(
+                'Authentication service unavailable',
+              ),
+          ),
+        ),
+      );
   }
 }

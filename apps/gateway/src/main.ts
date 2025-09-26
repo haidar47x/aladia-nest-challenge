@@ -3,9 +3,11 @@ import { GatewayModule } from './gateway.module';
 import { ValidationPipe } from '@nestjs/common';
 import { Logger } from '@lib/logger';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { AllExceptionsFilter } from './http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(GatewayModule, { bufferLogs: true });
+  app.useGlobalFilters(new AllExceptionsFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   const logger = await app.resolve(Logger);
