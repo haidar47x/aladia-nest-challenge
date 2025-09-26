@@ -1,99 +1,153 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
-import { of } from 'rxjs';
 import { NetworkingService } from '@lib/core';
+import { Logger } from '@lib/logger';
+import { of, throwError } from 'rxjs';
+import { ServiceUnavailableException } from '@nestjs/common';
 import { LoginUserDto, RegisterUserDto, UserRto } from '@lib/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { TokenRto } from '@lib/common/rto/token.rto';
+import { Reflector } from '@nestjs/core';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('AuthController', () => {
-  let authController: AuthController;
+  let controller: AuthController;
+  let networkingService: { authClient: { send: jest.Mock } };
+  let logger: { setContext: jest.Mock; log: jest.Mock };
 
-  let networkingService: Pick<NetworkingService, 'authClient'>;
-  let sendMock: jest.MockedFunction<ClientProxy['send']>;
+  const mockCacheManager = {
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  };
 
   beforeEach(async () => {
-    sendMock = jest.fn() as jest.MockedFunction<ClientProxy['send']>;
     networkingService = {
-      authClient: { send: sendMock } as unknown as ClientProxy,
+      authClient: { send: jest.fn() },
+    };
+    logger = {
+      setContext: jest.fn(),
+      log: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
-        {
-          provide: NetworkingService,
-          useValue: networkingService,
-        },
+        { provide: NetworkingService, useValue: networkingService },
+        { provide: Logger, useValue: logger },
+        { provide: CACHE_MANAGER, useValue: mockCacheManager },
+        { provide: Reflector, useValue: new Reflector() },
       ],
     }).compile();
 
-    authController = module.get<AuthController>(AuthController);
+    controller = module.get<AuthController>(AuthController);
   });
 
   describe('loginUser', () => {
-    it('should call auth service and return its response', (done) => {
-      const dto: LoginUserDto = {
-        email: 'user@example.com',
-        password: 'fake-strong-password',
-      };
+    it('should call networkingService.authClient.send with correct args', (done) => {
+      const dto: LoginUserDto = { email: 'test@test.com', password: 'pass123' };
+      const token: TokenRto = { token: 'jwt-token' };
 
-      const resp = { token: 'fake-jwt-token' };
-      sendMock.mockReturnValue(of(resp));
+      networkingService.authClient.send.mockReturnValue(of(token));
 
-      authController.loginUser(dto).subscribe((value) => {
-        expect(sendMock).toHaveBeenCalledWith({ cmd: 'login-user' }, dto);
-        expect(value).toEqual(resp);
+      controller.loginUser(dto).subscribe((result) => {
+        expect(result).toEqual(token);
+        expect(networkingService.authClient.send).toHaveBeenCalledWith(
+          { cmd: 'login-user' },
+          dto,
+        );
         done();
+      });
+    });
+
+    it('should propagate errors from authClient.send', (done) => {
+      const dto: LoginUserDto = { email: 'fail@test.com', password: 'wrong' };
+      networkingService.authClient.send.mockReturnValue(
+        throwError(() => new Error('Unauthorized')),
+      );
+
+      controller.loginUser(dto).subscribe({
+        error: (err) => {
+          expect(err.message).toBe('Unauthorized');
+          done();
+        },
       });
     });
   });
 
   describe('registerUser', () => {
-    it('should call auth service and return created user', (done) => {
+    it('should call networkingService.authClient.send with correct args', (done) => {
       const dto: RegisterUserDto = {
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        password: 'fake-strong-password',
+        email: 'new@test.com',
+        password: 'abc123',
+        name: 'testname',
+      };
+      const user: UserRto = {
+        _id: '1',
+        email: dto.email,
+        name: 'testname',
       };
 
-      const user: UserRto = {
-        _id: '<id-placeholder>',
-        name: 'John',
-        email: 'john@example.com',
-      } as UserRto;
+      networkingService.authClient.send.mockReturnValue(of(user));
 
-      sendMock.mockReturnValue(of(user));
-
-      authController.registerUser(dto).subscribe((value) => {
-        expect(sendMock).toHaveBeenCalledWith({ cmd: 'register-user' }, dto);
-        expect(value).toEqual(user);
+      controller.registerUser(dto).subscribe((result) => {
+        expect(result).toEqual(user);
+        expect(networkingService.authClient.send).toHaveBeenCalledWith(
+          { cmd: 'register-user' },
+          dto,
+        );
         done();
       });
     });
   });
 
   describe('getAllUsers', () => {
-    it('should call auth service and return users', (done) => {
+    it('should extract bearer token and call networkingService.authClient.send', (done) => {
       const users: UserRto[] = [
-        { _id: '<id-1>', name: 'A', email: 'user@example.com' } as UserRto,
+        {
+          _id: '1',
+          email: 'a@test.com',
+          name: '',
+        },
       ];
-      sendMock.mockReturnValue(of(users));
+      networkingService.authClient.send.mockReturnValue(of(users));
 
-      authController.getAllUsers().subscribe((value) => {
-        expect(sendMock).toHaveBeenCalledWith({ cmd: 'get-users' }, {});
-        expect(value).toEqual(users);
+      controller.getAllUsers('Bearer some-token').subscribe((result) => {
+        expect(result).toEqual(users);
+        expect(networkingService.authClient.send).toHaveBeenCalledWith(
+          { cmd: 'get-users' },
+          { token: 'some-token' },
+        );
         done();
       });
     });
   });
 
   describe('ping', () => {
-    it('should call ping command', (done) => {
-      sendMock.mockReturnValue(of('<pong-placeholder>'));
-      authController.ping().subscribe((value) => {
-        expect(sendMock).toHaveBeenCalledWith({ cmd: 'ping' }, {});
-        expect(value).toBe('<pong-placeholder>');
+    it('should return pong when service is available', (done) => {
+      networkingService.authClient.send.mockReturnValue(of('pong'));
+
+      controller.ping().subscribe((result) => {
+        expect(result).toBe('pong');
+        expect(networkingService.authClient.send).toHaveBeenCalledWith(
+          { cmd: 'ping' },
+          {},
+        );
+        expect(logger.log).toHaveBeenCalledWith('Pinging...');
         done();
+      });
+    });
+
+    it('should throw ServiceUnavailableException on failure', (done) => {
+      networkingService.authClient.send.mockReturnValue(
+        throwError(() => new Error('Connection refused')),
+      );
+
+      controller.ping().subscribe({
+        error: (err) => {
+          expect(err).toBeInstanceOf(ServiceUnavailableException);
+          expect(err.message).toBe('Authentication service unavailable');
+          done();
+        },
       });
     });
   });

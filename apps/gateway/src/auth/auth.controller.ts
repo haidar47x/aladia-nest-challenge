@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Headers,
-  HttpException,
   Inject,
   Post,
   ServiceUnavailableException,
