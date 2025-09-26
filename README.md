@@ -10,9 +10,7 @@
 - [x] **Validation**: Implement validation with `class-validator`
 - [x] **Database**: Persistence using `mongodb`
 - [x] **Logging**: Centralized module
-- [ ] **Tests**:
-    - [x] Unit Tests
-    - [ ] E2E Tests
+- [x] **Unit Tests**: Unit test for controllers
 - [x] **Health Checks**: `<gateway>/health`
   - [x] Gateway microservice hit
   - [x] NetworkService hit
