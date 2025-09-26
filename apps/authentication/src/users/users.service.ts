@@ -11,6 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Logger } from '@lib/logger';
 import { TokenRto } from '@lib/common/rto/token.rto';
 import { plainToInstance } from 'class-transformer';
+import { RpcException } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService {
@@ -27,10 +28,16 @@ export class UsersService {
 
     if (exists) {
       this.logger.log('Email already exists: ' + dto.email);
-      throw new ConflictException('Email already exists');
+      throw new RpcException(new ConflictException('Email already exists'));
     }
 
-    const passwordHash = await bcrypt.hash(dto.password, 10);
+    let passwordHash: string;
+    try {
+      passwordHash = await bcrypt.hash(dto.password, 10);
+    } catch (err) {
+      throw new RpcException(err);
+    }
+
     const userToCreate = {
       ...dto,
       passwordHash,
@@ -51,13 +58,13 @@ export class UsersService {
     const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       this.logger.log('User not found: ' + email);
-      throw new UnauthorizedException('User not found');
+      throw new RpcException(new UnauthorizedException("Email doesn't exists"));
     }
 
     const credentialsMatch = await bcrypt.compare(password, user.passwordHash);
     if (!credentialsMatch) {
       this.logger.log("Credentials don't match...");
-      throw new UnauthorizedException('Invalid credentials');
+      throw new RpcException(new UnauthorizedException('Invalid credentials'));
     }
 
     const token = this.jwtService.sign({

@@ -47,11 +47,7 @@ export class AuthController {
         },
         data,
       )
-      .pipe(
-        catchError((err) =>
-          throwError(() => new HttpException(err.message, err.status)),
-        ),
-      );
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   @ApiOperation({
@@ -75,11 +71,7 @@ export class AuthController {
         },
         data,
       )
-      .pipe(
-        catchError((err) =>
-          throwError(() => new HttpException(err.message, err.status)),
-        ),
-      );
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   @ApiBearerAuth()
@@ -108,11 +100,7 @@ export class AuthController {
     const token = authHeader?.split(' ')[1];
     return this.networkingService.authClient
       .send<UserRto[]>({ cmd: 'get-users' }, { token })
-      .pipe(
-        catchError((err) =>
-          throwError(() => new HttpException(err.message, err.status)),
-        ),
-      );
+      .pipe(catchError((err) => throwError(() => err)));
   }
 
   @ApiOperation({
