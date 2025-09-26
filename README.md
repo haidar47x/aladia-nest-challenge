@@ -4,8 +4,8 @@
 - [x] **Gateway**: Implement `gateway` app
 - [x] **Authentication**: Implement `authentication` app
     - [x] Implement JWT login flow on `/auth/login`
-    - [x] Implement `/register`
-    - [x] Implement `/users` for fetching users
+    - [x] Implement `auth/register`
+    - [x] Implement `auth/users` for fetching users
 - [x] **Network Service**: Implement `NetworkService` for internal communication via `TCP` from Gateway to Authentication
 - [x] **Validation**: Implement validation with `class-validator`
 - [x] **Database**: Persistence using `mongodb`
@@ -20,8 +20,9 @@
   - [x] MongoDB hit
 - [x] **Rate Limiting**
 - [x] **Caching**: via `cache-manager` for `/users`
+- [x] **Error Handling**: Centralized error handler
 - [x] **Swagger**: `<gateway>/api`
-- [ ] **Docker**: Dockerized all services
+- [x] **Docker**: Dockerized all services
+- [x] **Postman Collection**: [Link to Collection](https://haidar47x-4349353.postman.co/workspace/Haidar's-Workspace's-Workspace~b7b2e0e3-f487-4680-8014-d7b4d8ff438f/collection/48799541-86928dbb-5d2f-41a3-8f29-041695ce687a?action=share&source=copy-link&creator=48799541) or [GitHub Link]()
 - [ ] **Documentation**: GitHub `README.md` for usage and architectural documentation
-- [ ] **Postman Collection**: Simplified collection for quick testing
 - [ ] **Walkthrough**: Video walkthrough

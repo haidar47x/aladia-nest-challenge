@@ -1,0 +1,123 @@
+{
+	"info": {
+		"_postman_id": "86928dbb-5d2f-41a3-8f29-041695ce687a",
+		"name": "Aladia Nest Challenge",
+		"description": "### Welcome\n\nThis collection provides the required endpoints tests for `Aladia Nest Challenge`.\n\n#### Usage\n\nWe can simply run the app(s) in the repository either in standard fashion or in a Docker container.\n\nIf changes are made to the codebase, make sure to change `{{baseUrl}}` accordingly.\n\nFor Authentication to work, make sure to get an access token from `/auth/login` first and then make request to `/auth/users` using that acess token.\n\nThank you. :)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "48799541",
+		"_collection_link": "https://haidar47x-4349353.postman.co/workspace/Haidar's-Workspace's-Workspace~b7b2e0e3-f487-4680-8014-d7b4d8ff438f/collection/48799541-86928dbb-5d2f-41a3-8f29-041695ce687a?action=share&source=collection_link&creator=48799541"
+	},
+	"item": [
+		{
+			"name": "Quick Ping",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "Register New User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"John Doe\",\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"8F5A#8S5D6q0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/register",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"johndoe@example.com\",\r\n    \"password\": \"8F5A#8S5D6q0\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OGQ1ZTUwNTRmMWI5YjRkNmQ3NmFmMTIiLCJlbWFpbCI6ImpvaG5kb2VAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTg4NDgzNDcsImV4cCI6MTc1ODg1NTU0N30.atpwVB6K_uZPskMckuxuEHX_LD7UXy8eB7QVm0Yb4yc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/auth/users",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"auth",
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
